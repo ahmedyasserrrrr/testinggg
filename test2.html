@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .navbar-toggler {
+            font-size: 30px;
+            cursor: pointer;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-toggler:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .price {
+            margin-top: 50px;
+            margin-right: 20px;
+            text-align: right;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .price span {
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .ingredients {
+            list-style-type: none;
+            padding: 0;
+            margin-right: 20px;
+            text-align: right;
+        }
+        
+        .ingredients li {
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ingredients li:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: white;
+            overflow-x: hidden;
+            transition: 0.5s;
+            direction: rtl;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidenav-container {
+            padding-top: 60px;
+            text-align: right;
+            padding-right: 20px;
+        }
+        
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+        
+        .closebtn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 36px;
+            margin-right: 15px;
+            color: #818181;
+            transition: 0.3s;
+        }
+        
+        .closebtn:hover {
+            color: #f1f1f1;
+        }
+        
+        .side-item {
+            padding: 10px;
+            background-color: white;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .side-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .side-item .item-info {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .side-item .item-info .item-name {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .side-item .item-info .item-price {
+            margin-left: 10px;
+            color: #007bff;
+        }
+        
+        .side-item .remove-item {
+            color: red;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .side-item .remove-item:hover {
+            color: darkred;
+        }
+        
+        button {
+            margin-right: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar-toggler" onclick="openSideNav()">
+            &#9776; <!-- رمز القائمة الجانبية -->
+        </div>
+
+        <div class="price">
+            <h5>السعر: <span id="price">$50</span></h5>
+            <button id="add-selected-items" onclick="addSelectedItems()">أضف إلى السلة</button>
+        </div>
+
+        <ul class="ingredients">
+            <li>العنصر 1 <button data-price="200" onclick="increasePrice(200, this)">+</button></li>
+            <li>العنصر 2 <button data-price="10" onclick="increasePrice(10, this)">+</button></li>
+            <li>العنصر 3 <button data-price="8" onclick="increasePrice(8, this)">+</button></li>
+            <li>العنصر 4 <button data-price="6" onclick="increasePrice(6, this)">+</button></li>
+            <li>العنصر 5 <button data-price="3" onclick="increasePrice(3, this)">+</button></li>
+        </ul>
+
+        <div class="sidenav" id="mySidenav">
+            <div class="sidenav-container">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeSideNav()">&times;</a>
+                <p>سلة التسوق</p>
+                <div id="cart-items"></div> <!-- هنا توضع العناصر التي يتم إضافتها -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openSideNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeSideNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+        function addSelectedItems() {
+            const sideNavContainer = document.getElementById('cart-items');
+            sideNavContainer.innerHTML = ''; // تفريغ القائمة الجانبية قبل إضافة العناصر
+
+            // إضافة سعر المنتج الأساسي إلى القائمة الجانبية
+            const priceElement = document.getElementById('price').innerText;
+            const productItem = document.createElement('div');
+            productItem.classList.add('side-item');
+            productItem.innerHTML = `
+                <span class="item-info">
+                    <span class="item-name">السعر الكلي</span>
+                    <span class="item-price">${priceElement}</span>
+                </span>
+            `;
+            sideNavContainer.appendChild(productItem);
+
+            // الحصول على العناصر المختارة من قائمة الإضافات وإضافتها إلى القائمة الجانبية
+            const ingredients = document.querySelectorAll('.ingredients li');
+            ingredients.forEach(item => {
+                const button = item.querySelector('button');
+                if (button.clicked) {
+                    const ingredientName = item.firstChild.textContent.trim();
+                    const ingredientPrice = parseFloat(button.getAttribute('data-price'));
+
+                    const newItem = document.createElement('div');
+                    newItem.classList.add('side-item');
+                    newItem.innerHTML = `
+<img src="images/pexels-fauxels-3183153.jpg" alt="${ingredientName}">
+
+                        <span class="item-info">
+                            <span class="item-name">${ingredientName}</span>
+                            <span class="item-price">$${ingredientPrice.toFixed(2)}</span>
+                            <span class="remove-item" onclick="removeItem(this)">-</span>
+                        </span>
+                    `;
+                    sideNavContainer.appendChild(newItem);
+                }});
+
+// تحديث حالة السلة
+const emptyCartMessage = document.querySelector('.sidenav p');
+emptyCartMessage.style.display = 'none';
+}
+
+function increasePrice(amount, button) {
+const priceElement = document.getElementById('price');
+let currentPrice = parseFloat(priceElement.innerText.replace('$', ''));
+currentPrice += amount;
+priceElement.innerText = '$' + currentPrice.toFixed(2);
+
+// تعيين خاصية clicked للزر
+button.clicked = true;
+}
+
+function removeItem(item) {
+const itemToRemove = item.parentNode.parentNode;
+itemToRemove.parentNode.removeChild(itemToRemove);
+const sideNavContainer = document.getElementById('cart-items');
+if (sideNavContainer.children.length === 1) {
+    const emptyCartMessage = document.querySelector('.sidenav p');
+    emptyCartMessage.style.display = 'block';
+}
+}
+</script>
